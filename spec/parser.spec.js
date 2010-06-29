@@ -1,6 +1,7 @@
 var vows    = require('vows'),
     assert  = require('assert'),
     helpers = require('./helpers'),
+	logger  = require('nerd-router/logger');
     parser  = require('nerd-router/parser');
 
 var api = {
@@ -144,4 +145,47 @@ vows.describe('path parsing').addBatch({
 		}
 	}
 
+}).export(module);
+
+vows.describe('parameter parsing').addBatch({
+
+	'a route config of "get /:id{\\d{2}}"': {
+		topic: api.parse('get /:id{\\d{2}}'),
+
+		'should match paths of two numbers (/21, /34, /48)': function(topic) {
+			assert.isTrue(topic.matcher.test('/21'));
+			assert.isTrue(topic.matcher.test('/34'));
+			assert.isTrue(topic.matcher.test('/76'));
+		},
+
+		'should not match paths of single numbers (/2)': function(topic) {
+			assert.isFalse(topic.matcher.test('/2'));
+		}
+	},
+
+	'a route config with multiple parts': {
+		topic: api.parse('get /:name{\\w+}/:id{\\d+}'),
+
+		'should match valid paths': function(topic) {
+			assert.isTrue(topic.matcher.test('/jon/324'));
+		},
+
+		'should not match invalid paths': function(topic) {
+			assert.isFalse(topic.matcher.test('/jon/iscool'));
+		},
+
+		'should not match partial paths': function(topic) {
+			assert.isFalse(topic.matcher.test('/jon'));
+		}
+	},
+
+	'a route config with multiple parts and a wildcard': {
+		topic: api.parse('get /:name{\\w{2}}/:id{\\d+}/*'),
+
+		'should match any valid path': function(topic) {
+			logger.log("topic:", topic);
+			assert.isTrue(topic.matcher.test('/en/4/blah/blah/blah'));
+			assert.isTrue(topic.matcher.test('/ru/3'));
+		}
+	}
 }).export(module);
