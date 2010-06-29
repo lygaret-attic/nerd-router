@@ -1,7 +1,7 @@
 var vows    = require('vows'),
-	assert  = require('assert'),
-	helpers = require('./helpers'),
-	parser  = require('nerd-router/parser');
+    assert  = require('assert'),
+    helpers = require('./helpers'),
+    parser  = require('nerd-router/parser');
 	
 vows.describe('Route Config Parser').addBatch({
 
