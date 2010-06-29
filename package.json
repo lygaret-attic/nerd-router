@@ -1,0 +1,21 @@
+{
+	"name": "nerd-router",
+	"version": "0.0.1",
+	"description": "Super-nerdy HTTP routing, for node.js",
+	"author": "Jon Raphaelson (lygaret)",
+
+	"directories": { "lib" : "./lib" },
+	"main": "./lib/nerd-router",
+
+	"repository": {
+		"type": "git",
+		"url": "http://github.com/lygaret/nerd-router.git"
+	},
+
+	"dependencies": {
+		"vows" : ">=0.4.5"
+	},
+
+	"engine": [ "node >=0.1.97" ]
+}
+
