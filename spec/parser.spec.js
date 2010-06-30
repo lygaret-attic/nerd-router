@@ -183,9 +183,30 @@ vows.describe('parameter parsing').addBatch({
 		topic: api.parse('get /:name{\\w{2}}/:id{\\d+}/*'),
 
 		'should match any valid path': function(topic) {
-			logger.log("topic:", topic);
 			assert.isTrue(topic.matcher.test('/en/4/blah/blah/blah'));
 			assert.isTrue(topic.matcher.test('/ru/3'));
+		}
+	},
+
+	'a route with named validators': {
+		topic: api.parse('get /:year{@year}/:month{@month}/:day{@day}/:slug{@slug}'),
+
+		'should match a valid path as expected': function(topic) {
+			assert.isTrue(topic.matcher.test('/2010/06/03/slugs-are-awesome'));
+		},
+
+		'should not match an invalid path': function(topic) {
+			assert.isFalse(topic.matcher.test('/2010/06/blah'));
+		},
+	},
+
+	'a route with named sections': {
+		topic: api.parse('get /:year{@year}/:slug{@slug}'),
+
+		'should handle retrieving the names': function(topic) {
+			var match = topic.matcher.exec('/2010/jon-is-awesome');
+			assert.equal(match[topic.params.year], '2010');
+			assert.equal(match[topic.params.slug], 'jon-is-awesome');
 		}
 	}
 }).export(module);
