@@ -44,6 +44,59 @@ var router = nerdrouter.route({
 		context.response.end("It was " + month + "/" + day + "/" + year + ", the worst day ever.\n");	
 	},
 
+	'get /wild/*': function(context, rest) {
+		context.response.writeHead(200, {'Content-Type': 'text/plain'});
+		context.response.end("wildcard value: " + rest + "path: " + context.path);
+	},
+
+	'any /blog/*': {
+	
+		'get /': function(context) {
+			context.response.writeHead(200, {'content-type': 'text/plain'});
+			context.response.end("blog home");
+		},
+
+		'get /tags': function(context) {
+			context.response.writeHead(200, {'content-type': 'text/plain'});
+			context.response.end("all tags");
+		},
+
+		// sub paths can be regular regex 
+
+		'get /tags/:tag{@slug}': function(context, tag) {
+			context.response.writeHead(200, {'content-type': 'text/plain'});
+			context.response.end("tag: '" + tag + "' index");
+		},
+
+		// or if the structure is easier, they can be nested
+
+		'get /:year{@year}/*': {
+			'get /': function(context, year) {
+				context.response.writeHead(200, {'content-type': 'text/plain'});
+				context.response.end(year + " index");
+			},
+
+			'get /:month{@month}/*': {
+				'get /': function(context, year, month) {
+					context.response.writeHead(200, {'content-type': 'text/plain'});
+					context.response.end(month + "/" + year + " index");
+				},
+
+				'get /:day{@day}/*': {
+					'get /': function(context, year, month, day) {
+						context.response.writeHead(200, {'content-type': 'text/plain'});
+						context.response.end(month + "/" + day + "/" + year + " index");
+					},
+
+					'get /:slug{@slug}': function(context, year, month, day, slug) {
+						context.response.writeHead(200, {'content-type': 'text/plain'});
+						context.response.end("individual post for: " + month + "/" + day + "/" + year + ", " + slug);
+					}
+				}
+			}
+		}
+	},
+
 	'get *': function(context) {
 		context.response.writeHead(200, {'Content-Type': 'text/plain'});
 		context.response.end("'" + context.path + "' was not found. 404.\n");
