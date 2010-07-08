@@ -1,8 +1,8 @@
 var vows    = require('vows'),
     assert  = require('assert'),
     helpers = require('./helpers'),
-	logger  = require('nerd-router/logger');
-    parser  = require('nerd-router/parser');
+	logger  = require('nerdrouter/logger');
+    parser  = require('nerdrouter/parser');
 
 var api = {
 	parse: function (str) {
