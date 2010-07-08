@@ -1,6 +1,6 @@
 {
 	"name": "nerdrouter",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"description": "Super-nerdy HTTP routing, for node.js",
 	"author": "Jon Raphaelson (lygaret)",
 
