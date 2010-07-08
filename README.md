@@ -9,8 +9,9 @@ people taking advantage of this in the routing frameworks.
 
 Example:
 
+
 	var routes = require('nerdrouter').route({
-	
+
 		// a route spec is:
 		//   1. an HTTP verb, or the word 'any' to match any verb
 		//   2. a path consisting of one or more components,
@@ -20,7 +21,7 @@ Example:
 
 		// example blog router
 		'any /blog/*': {
-		
+
 			'get /': function(context) {
 				context.response.writeHead(200, {'content-type': 'text/plain'});
 				context.response.end("blog home");
@@ -65,18 +66,25 @@ Example:
 					}
 				}
 			}
+		},
+
+		// the last match should be a wildcard to catch 404s
+
+		'get *': function(context) {
+			context.response.writeHead(200, {'content-type': 'text/plain'});
+			context.response.end('Nothing matched; this should be a 404');
 		}
 	});
 
 	var url = require('url');
 	require('http').createServer(function(req, res) {
 		var context = {
-			path: url.parse(req.url).pathname;
+			path: url.parse(req.url).pathname,
 			request: req,
 			response: res
 		};
 
-		router.handle(context);
+		routes.handle(context);
 	}).listen(8124);
 
 
